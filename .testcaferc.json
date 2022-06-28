@@ -1,0 +1,28 @@
+{
+	"browsers": "chrome",
+	"concurrency": 1,
+	"skipJsErrors": true,
+	"quarantineMode": false,
+	"disablePageCaching": true,
+	"skipUncaughtErrors": true,
+	"src": "tests/saas/*/*.js",
+	"maximizeWindow": true,
+	"screenshots": {
+		"path": "screenshots/",
+		"takeOnFails": true
+	},
+	"waits": {
+		"load": {
+			"maxAttempts": 50,
+			"timeout": 2000
+		},
+		"url": {
+			"maxAttempts": 40,
+			"timeout": 2000
+		},
+		"showing": {
+			"maxAttempts": 5,
+			"timeout": 1000
+		}
+	}
+}

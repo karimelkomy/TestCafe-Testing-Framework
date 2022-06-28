@@ -1,0 +1,45 @@
+timeout: '18000s'
+steps:
+  - id: 'Build Docker Image'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'test_image', '-f', '/workspace/automated-test/Dockerfile', '.']
+  - id: 'Run AT Tests'
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'run',
+        '--volume',
+        '/workspace/automated-test:/automated-test',
+        '--volume',
+        '/workspace/automated-test/screenshots:/screenshots',
+        '--env',
+        'SAAS_TEST_PASSWORD=${_SAAS_TEST_PASSWORD}',
+        '--env',
+        'STC_TEST_PASSWORD=${_STC_TEST_PASSWORD}',
+        '--env',
+        'AT_PASSWORD=${_AT_PASSWORD}',
+        '--env',
+        'ENVIRONMENT=${_ENVIRONMENT_VARIABLE}',
+        '--env',
+        'EMAIL=${_EMAIL_VARIABLE}',
+        '--env',
+        'BUILD_ID=$BUILD_ID',
+        '--env',
+        'BRANCH_NAME=$BRANCH_NAME',
+        '--env',
+        'TESTCAFE_SLACK_WEBHOOK=${_TESTCAFE_SLACK_WEBHOOK}',
+        '--env',
+        'NODE_OPTIONS=--max_old_space_size=8000',
+        '--rm',
+        'test_image',
+        'chromium:headless --no-sandbox',
+        '--skip-js-errors',
+        '--skip-uncaught-errors',
+        '--disable-multiple-windows',
+        '--screenshots-on-fails',
+        '--screenshots',
+        '/screenshots',
+        '/automated-test/tests/saas/${_ORG_VARIABLE}-organization/*.js',
+        '--reporter',
+        'spec,slack-custom',
+      ]
