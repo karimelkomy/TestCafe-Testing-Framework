@@ -1,8 +1,0 @@
-const OrderStatus = {
-	DRAFT: 'DRAFT',
-	PENDING_WITH_VENDOR: 'PENDING WITH VENDOR',
-	APPROVAL_PENDING: 'APPROVAL PENDING',
-	SUBMITTED: 'SUBMITTED',
-};
-
-export default OrderStatus;

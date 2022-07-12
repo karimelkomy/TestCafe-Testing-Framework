@@ -1,6 +1,0 @@
-const EsourceSourcing = {
-	SOURCE_FROM_VENDORS: 'SOURCE_FROM_VENDORS',
-	SOURCE_FROM_PREFERRED_VENDOR: 'SOURCE_FROM_PREFERRED_VENDOR',
-};
-
-export default EsourceSourcing;
