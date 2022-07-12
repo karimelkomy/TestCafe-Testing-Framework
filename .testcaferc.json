@@ -9,7 +9,7 @@
   "maximizeWindow": true,
   "waits": {
     "load": {
-      "maxAttempts": 30,
+      "maxAttempts": 10,
       "timeout": 2000
     },
     "url": {
