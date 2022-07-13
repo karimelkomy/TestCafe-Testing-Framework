@@ -1,26 +1,15 @@
-import BookmarksHeader from "../components/BookmarksHeader/BookmarksHeader";
-import SearchModel from "../components/SearchModel";
-import PrivacyModel from "../components/PrivacyModel";
+import ContactModel from "../components/ContactModel";
+import { InvalidEmailError } from "../data/ErrorMessage";
 
 export default class HomePage {
   constructor() {
-    this.privacyModel = new PrivacyModel();
-    this.bookmarksHeader = new BookmarksHeader();
-    this.searchModel = new SearchModel();
+    this.contactModel = new ContactModel();
   }
 
-  async validateBookmarks(bookmarks) {
-    await this.privacyModel.accept();
-    await this.bookmarksHeader.validateBookmarksVisibility(bookmarks);
-  }
-
-  async search(searchInput, searchResult) {
-    await this.privacyModel.accept();
-    await this.searchModel.search(searchInput, searchResult);
-  }
-
-  async goToContactPage() {
-    await this.privacyModel.accept();
-    await this.bookmarksHeader.openContactPage();
+  async submitContactsWithInvalidEmail(contactsDetails) {
+    for (let contactDetails of contactsDetails) {
+      await this.contactModel.submit(contactDetails);
+      await this.contactModel.validateErrorMessage(InvalidEmailError);
+    }
   }
 }

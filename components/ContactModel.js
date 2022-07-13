@@ -1,74 +1,64 @@
+import { sprintf } from "sprintf-js";
 import GenericElement from "./shared/core/GenericElement";
 
 export default class ContactModel extends GenericElement {
   constructor() {
     super();
-    this.youText = '//span[text()="you"]';
-    this.firstNameInput = '//input[@name="firstname"]';
-    this.lastNameInput = '//input[@name="lastname"]';
-    this.emailInput = '//input[@name="email"]';
-    this.phoneInput = '//input[@name="mobilephone"]';
-    this.companyInput = '//input[@name="company"]';
-    this.messageInput = '//textarea[@name="message"]';
-    this.legalCheckbox =
-      '//input[@type="checkbox" and contains(@id, "LEGAL_CONSENT")]';
-    this.sendMessageButton = '//input[@value="SEND MESSAGE"]';
+    this.element = "//form";
+    this.contactUsButton = '//button[./span[@data-alt="Contact us"]]';
+    this.nameInput = `${this.element}//input[@name="your-name"]`;
+    this.emailInput = `${this.element}//input[@name="your-email"]`;
+    this.mobileInput = `${this.element}//input[@name="mobile-number"]`;
+    this.subjectInput = `${this.element}//input[@name="your-subject"]`;
+    this.messageInput = `${this.element}//textarea[@name="your-message"]`;
+    this.sendButton = `${this.element}//input[@value="Send"]`;
+    this.errorMessage = `${this.element}//span[contains(@class, "your-email")]/span[text()="%s"]`;
   }
 
-  async activateComponent() {
-    await this.click(this.youText);
+  async clickContactUsButton() {
+    await this.click(this.contactUsButton);
   }
 
-  async fillFirstName(firstName) {
-    await this.fill(this.firstNameInput, firstName);
-  }
-
-  async fillLastName(lastName) {
-    await this.fill(this.lastNameInput, lastName);
+  async fillName(name) {
+    await this.fill(this.nameInput, name);
   }
 
   async fillEmail(email) {
     await this.fill(this.emailInput, email);
   }
 
-  async fillPhone(phone) {
-    await this.fill(this.phoneInput, phone);
+  async fillMobile(mobile) {
+    await this.fill(this.mobileInput, mobile);
   }
 
-  async fillCompany(company) {
-    await this.fill(this.companyInput, company);
+  async fillSubject(subject) {
+    await this.fill(this.subjectInput, subject);
   }
 
   async fillMessage(message) {
     await this.fill(this.messageInput, message);
   }
 
-  async clickLegalCheckbox() {
-    await this.click(this.legalCheckbox);
+  async clickSendButton() {
+    await this.click(this.sendButton);
   }
 
-  async hoverSendMessage() {
-    await this.hover(this.sendMessageButton);
+  async validateErrorMessage(errorMessage) {
+    await this.validateElementVisibility(
+      sprintf(this.errorMessage, errorMessage)
+    );
   }
 
   async submit(contactDetails) {
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      company,
-      message
-    } = contactDetails;
+    const { name, email, mobile, subject, message } = contactDetails;
 
-    await this.activateComponent();
-    await this.fillFirstName(firstName);
-    await this.fillLastName(lastName);
+    await this.clickContactUsButton();
+
+    await this.fillName(name);
     await this.fillEmail(email);
-    await this.fillPhone(phone);
-    await this.fillCompany(company);
+    await this.fillMobile(mobile);
+    await this.fillSubject(subject);
     await this.fillMessage(message);
-    await this.clickLegalCheckbox();
-    await this.hoverSendMessage();
+    await this.clickSendButton();
   }
 }

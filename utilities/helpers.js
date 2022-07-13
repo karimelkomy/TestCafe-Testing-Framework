@@ -125,3 +125,22 @@ export const generateRandomEmail = (prefix = generateRandomAlphabetic()) =>
     11111111111111,
     99999999999999
   )}@mailinator.com`;
+
+export const waitForUrlChanged = async desiredUrl => {
+  const { maxAttempts, timeout } = waits.url;
+  let currentUrl;
+
+  for (let i = 0; i < maxAttempts; i += 1) {
+    currentUrl = await getCurrentUrl();
+
+    if (currentUrl === desiredUrl) {
+      return true;
+    }
+
+    await t.wait(timeout);
+  }
+
+  throw new Error(
+    `waitForUrlChanged failed - Current URL: ${currentUrl} - Desired URL: ${desiredUrl}`
+  );
+};

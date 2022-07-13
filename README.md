@@ -7,7 +7,7 @@
 # Run
 
 - Run `yarn at` to run all tests inside tests folder
-- Run `yarn at --customTest {testMeta}` to run specific test scenario, example: `yarn at --customTest contact-support-team`
+- Run `yarn at --customTest {testMeta}` to run specific test scenario, example: `yarn at --customTest log-all-positions-in-sofia-and-skopje`
 
 # Report
 
