@@ -1,0 +1,24 @@
+{
+  "browsers": "chrome",
+  "concurrency": 1,
+  "skipJsErrors": true,
+  "quarantineMode": false,
+  "disablePageCaching": true,
+  "skipUncaughtErrors": true,
+  "src": "tests/*.js",
+  "maximizeWindow": true,
+  "waits": {
+    "load": {
+      "maxAttempts": 10,
+      "timeout": 2000
+    },
+    "url": {
+      "maxAttempts": 20,
+      "timeout": 2000
+    },
+    "showing": {
+      "maxAttempts": 5,
+      "timeout": 1000
+    }
+  }
+}
