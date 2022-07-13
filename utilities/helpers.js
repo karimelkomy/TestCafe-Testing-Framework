@@ -141,6 +141,6 @@ export const waitForUrlChanged = async desiredUrl => {
   }
 
   throw new Error(
-    `waitForUrlChanged failed - Current URL: ${currentUrl} - Desired URL: ${desiredUrl}`
+    `waitForUrlChanged failed - Current URL: ${currentUrl} - Desired URL: ${desiredUrl} `
   );
 };
