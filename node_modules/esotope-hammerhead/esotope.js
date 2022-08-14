@@ -970,17 +970,42 @@ var FLOATING_OR_OCTAL_REGEXP  = /[.eExX]|^0[0-9]+/,
 
 
 //Common expression generators
-function generateLogicalOrBinaryExpression ($expr, settings) {
+function isLogicalExpression(node) {
+    if (!node)
+        return false;
+
+    return node.type === Syntax.LogicalExpression;
+}
+
+function needParensForLogicalExpression (node, parent) {
+    switch (node.operator) {
+        case "||":
+            if (!isLogicalExpression(parent)) return false;
+            return parent.operator === "??" || parent.operator === "&&";
+
+        case "&&":
+            return isLogicalExpression(parent, {
+                operator: "??"
+            });
+
+        case "??":
+            return isLogicalExpression(parent) && parent.operator !== "??";
+    }
+}
+
+function generateLogicalOrBinaryExpression ($expr, settings, $parent) {
     var op                 = $expr.operator,
         precedence         = BinaryPrecedence[$expr.operator],
         parenthesize       = precedence < settings.precedence,
         allowIn            = settings.allowIn || parenthesize,
         operandGenSettings = Preset.e16(precedence, allowIn),
-        exprJs             = exprToJs($expr.left, operandGenSettings);
+        exprJs             = exprToJs($expr.left, operandGenSettings, $expr);
 
     parenthesize |= op === 'in' && !allowIn;
 
-    if (parenthesize)
+    var needParens = needParensForLogicalExpression($expr, $parent);
+
+    if (parenthesize || needParens)
         _.js += '(';
 
     // 0x2F = '/'
@@ -1003,7 +1028,7 @@ function generateLogicalOrBinaryExpression ($expr, settings) {
 
     _.js += exprJs;
 
-    if (parenthesize)
+    if (parenthesize || needParens)
         _.js += ')';
 }
 
@@ -1913,7 +1938,7 @@ var StmtRawGen = {
             prevIndent = shiftIndent();
 
         _.js += 'catch' + _.optSpace;
-        
+
         if ($param) {
            _.js += '(';
            ExprGen[$param.type]($param, Preset.e5);
@@ -1927,8 +1952,8 @@ var StmtRawGen = {
         _.indent = prevIndent;
         if ($param) {
            _.js += ')';
-        } 
-     
+        }
+
         _.js += adoptionPrefix($body);
         StmtGen[$body.type]($body, Preset.s7);
     },
@@ -2112,7 +2137,7 @@ var StmtRawGen = {
         if ($init) {
             ExprGen[$id.type]($id, genSettings);
             _.js += _.optSpace + '=' + _.optSpace;
-            ExprGen[$init.type]($init, genSettings);
+            ExprGen[$init.type]($init, genSettings, $stmt);
         }
 
         else {
@@ -2426,11 +2451,11 @@ function generateStatement ($stmt, option) {
 
 //CodeGen
 //-----------------------------------------------------------------------------------
-function exprToJs ($expr, settings) {
+function exprToJs ($expr, settings, $parent) {
     var savedJs = _.js;
     _.js        = '';
 
-    ExprGen[$expr.type]($expr, settings);
+    ExprGen[$expr.type]($expr, settings, $parent);
 
     var src = _.js;
     _.js    = savedJs;

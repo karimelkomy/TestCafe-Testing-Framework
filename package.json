@@ -1,11 +1,13 @@
 {
-  "name": "testcafe-framework-beta",
-  "version": "1.0",
-  "engines": {
-    "node": "14"
+  "name": "floward-task",
+  "version": "1.0.0",
+  "description": "AT for Floward",
+  "main": "doc-allure-config.js",
+  "directories": {
+    "test": "tests"
   },
   "scripts": {
-    "at": "node runner.js"
+    "test": "yarn at"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
@@ -13,5 +15,11 @@
     "sprintf-js": "^1.1.2",
     "testcafe": "^1.15.3",
     "testcafe-reporter-allure-expanded": "^1.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-personal:karimelkomy/TestCafe-Testing-Framework.git"
+  },
+  "author": "Karim Elkomy",
+  "license": "ISC"
 }
