@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "yarn at"
+    "at": "node runner.js"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
