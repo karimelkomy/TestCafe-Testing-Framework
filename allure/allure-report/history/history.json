@@ -1,0 +1,1 @@
+{"bc885dd35fa1dd9ed62e061c6b9b50b3":{"statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1},"items":[{"uid":"1ace04908da87782","status":"passed","statusDetails":"This test has been passed.","time":{"start":1660479893993,"stop":1660479917130,"duration":23137}}]}}
