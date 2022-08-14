@@ -1,0 +1,28 @@
+timeout: "18000s"
+steps:
+  - id: "Build Docker Image"
+    name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "test_image", "-f", "/workspace/Dockerfile", "."]
+  - id: "Run AT Tests"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "run",
+        "--volume",
+        "/workspace/automated-test:/automated-test",
+        "--volume",
+        "/workspace/screenshots:/screenshots",
+        "NODE_OPTIONS=--max_old_space_size=8000",
+        "--rm",
+        "test_image",
+        "chromium:headless --no-sandbox",
+        "--skip-js-errors",
+        "--skip-uncaught-errors",
+        "--disable-multiple-windows",
+        "--screenshots-on-fails",
+        "--screenshots",
+        "/screenshots",
+        "/automated-test/tests/*.js",
+        "--reporter",
+        "spec",
+      ]
